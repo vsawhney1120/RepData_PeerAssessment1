@@ -479,8 +479,8 @@ activitydata_with_means$type_of_day &lt;- vector(length = length(activitydata_wi
     }
 activitydata_with_means$type_of_day &lt;- as.factor(activitydata_with_means$type_of_day)</code></pre>
 </div>
-<div id="creating-a-panel-plot-containing-a-time-series-plot-of-the-5-minute-interval-and-the-average-number-of-steps-taken-averaged-across-all-weekday-days-or-weekend-days." class="section level3">
-<h3>Creating a panel plot containing a time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days.</h3>
+<div id="creating-a-panel-plot-containing-time-series-plots-of-the-5-minute-interval-and-the-average-number-of-steps-taken-averaged-across-all-weekday-days-or-weekend-days." class="section level3">
+<h3>Creating a panel plot containing time series plots of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days.</h3>
 <pre class="r"><code>par(mfrow = c(2,1), mar = c(4,4,2,1))
 activitydata_with_means_split &lt;- split.data.frame(activitydata_with_means, activitydata_with_means$type_of_day)
 

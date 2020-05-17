@@ -132,3 +132,4 @@ colnames(mean_total_steps_by_interval_weekend) <- c("Interval", "Average_Total_S
 mean_total_steps_by_interval_weekend <- cbind(activitydata_with_means_weekend, mean_total_steps_by_interval_weekend)
 with(mean_total_steps_by_interval_weekend, plot(as.numeric(as.character(Interval)), Average_Total_Steps, type = "l", xlab = "Interval", ylab = "Average Total Steps", main = "Weekend", ylim = c(0,250)))
 ```
+

@@ -193,3 +193,4 @@ with(mean_total_steps_by_interval_weekend, plot(as.numeric(as.character(Interval
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
