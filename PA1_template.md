@@ -7,55 +7,86 @@ output:
 
 ## Part 1
 ### Reading the data
-```{r}
+
+```r
 unzip("activity.zip")
 activitydata <- read.csv("activity.csv")
 ```
 
 ## Part 2
 ### Calculating total steps per day
-```{r}
+
+```r
 totalsteps <- with(activitydata, tapply(steps, date, sum, na.rm = TRUE))
 ```
 
 ### Generating a histogram of total steps per day
-```{r}
+
+```r
 hist(totalsteps, xlab = "Total Steps", main = "Histogram of Total Steps per Day")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
 ### Calculating mean and median of total steps per day
-```{r}
+
+```r
 meantotalsteps <- mean(totalsteps, na.rm = TRUE)
 paste("Mean", meantotalsteps, sep = ": ")
+```
 
+```
+## [1] "Mean: 9354.22950819672"
+```
+
+```r
 mediantotalsteps <- median(totalsteps, na.rm = TRUE)
 paste("Meadian", mediantotalsteps, sep = ": ")
 ```
 
+```
+## [1] "Meadian: 10395"
+```
+
 ## Part 3
 ### Time series plot of average total number of steps by 5-minute intervals
-```{r}
+
+```r
 mean_total_steps_by_interval <- with(activitydata, tapply(steps, interval, mean, na.rm = TRUE))
 mean_total_steps_by_interval <- as.data.frame(as.table(mean_total_steps_by_interval))
 colnames(mean_total_steps_by_interval) <- c("Interval", "Average_Total_Steps")
 with(mean_total_steps_by_interval, plot(Interval, Average_Total_Steps, type = "l", xlab = "Interval", ylab = "Average Total Steps", main = "Average Total Steps by 5-Minute Interval"))
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
 ### Determining the 5-minute interval with, on average, the maximum total number of steps
-```{r}
+
+```r
 max_steps_interval <- subset(mean_total_steps_by_interval, Average_Total_Steps == max(mean_total_steps_by_interval$Average_Total_Steps))
 max_steps_interval[1,]
 ```
 
+```
+##     Interval Average_Total_Steps
+## 104      835            206.1698
+```
+
 ## Part 4
 ### Calculating the total number of missing values in the dataset
-```{r}
+
+```r
 number_of_rows_with_NAs <- sum(!complete.cases(activitydata))
 number_of_rows_with_NAs
 ```
 
+```
+## [1] 2304
+```
+
 ### Strategy for filling in missing values
-```{r}
+
+```r
 mean_total_steps_by_interval2 <- mean_total_steps_by_interval[,2]
 number_of_days <- length(unique(activitydata$date))
 mean_total_steps_by_interval2 <- rep(mean_total_steps_by_interval2, times = number_of_days)
@@ -69,35 +100,63 @@ for(i in 1:length(activitydata_with_means$steps))
 ```
 
 ### Creating a new dataset with the missing data filled in
-```{r}
+
+```r
 activitydata_with_means <- activitydata_with_means[,1:3]
 ```
 
 ### Generating a histogram of total steps per day after imputing missing values
-```{r}
+
+```r
 hist(activitydata_with_means$steps, xlab = "Total Steps", main = "Histogram of Total Steps per Day", sub = "Dataset with Imputed Values")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+
 ### Calculating mean and median of total steps per day after imputing missing values
-```{r}
+
+```r
 meantotalsteps1 <- mean(activitydata_with_means$steps)
 paste("Mean", meantotalsteps1, sep = ": ")
+```
+
+```
+## [1] "Mean: 37.3825995807128"
+```
+
+```r
 mediantotalsteps1 <- median(activitydata_with_means$steps)
 paste("Meadian", mediantotalsteps1, sep = ": ")
 ```
 
+```
+## [1] "Meadian: 0"
+```
+
 ### Calculating the difference in mean and median of dataset with and without imputed values
-```{r}
+
+```r
 diff_in_mean <- abs(meantotalsteps1 - meantotalsteps)
 paste("Difference in Mean", diff_in_mean, sep = ": ")
+```
 
+```
+## [1] "Difference in Mean: 9316.84690861601"
+```
+
+```r
 diff_in_median <- abs(mediantotalsteps1 - mediantotalsteps)
 paste("Difference in Meadian", diff_in_median, sep = ": ")
 ```
 
+```
+## [1] "Difference in Meadian: 10395"
+```
+
 ## Part 5
 ### Coding by “weekday” and “weekend”
-```{r}
+
+```r
 activitydata_with_means$day <- weekdays(as.Date(as.character(activitydata_with_means$date), "%Y-%m-%d"))
 activitydata_with_means$type_of_day <- vector(length = length(activitydata_with_means$day))
     for(i in 1:length(activitydata_with_means$day)){
@@ -113,7 +172,8 @@ activitydata_with_means$type_of_day <- as.factor(activitydata_with_means$type_of
 ```
 
 ### Creating a panel plot containing a time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days.
-```{r}
+
+```r
 par(mfrow = c(2,1), mar = c(4,4,2,1))
 activitydata_with_means_split <- split.data.frame(activitydata_with_means, activitydata_with_means$type_of_day)
 
@@ -131,3 +191,5 @@ colnames(mean_total_steps_by_interval_weekend) <- c("Interval", "Average_Total_S
 mean_total_steps_by_interval_weekend <- cbind(activitydata_with_means_weekend, mean_total_steps_by_interval_weekend)
 with(mean_total_steps_by_interval_weekend, plot(Interval, Average_Total_Steps, type = "l", xlab = "Interval", ylab = "Average Total Steps", main = "Weekend", ylim = c(0,250)))
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
