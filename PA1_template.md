@@ -55,7 +55,7 @@ paste("Meadian", mediantotalsteps, sep = ": ")
 mean_total_steps_by_interval <- with(activitydata, tapply(steps, interval, mean, na.rm = TRUE))
 mean_total_steps_by_interval <- as.data.frame(as.table(mean_total_steps_by_interval))
 colnames(mean_total_steps_by_interval) <- c("Interval", "Average_Total_Steps")
-with(mean_total_steps_by_interval, plot(Interval, Average_Total_Steps, type = "l", xlab = "Interval", ylab = "Average Total Steps", main = "Average Total Steps by 5-Minute Interval"))
+with(mean_total_steps_by_interval, plot(as.numeric(as.character(Interval)), Average_Total_Steps, type = "l", xlab = "Interval", ylab = "Average Total Steps", main = "Average Total Steps by 5-Minute Interval"))
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
@@ -85,11 +85,10 @@ number_of_rows_with_NAs
 ```
 
 ### Strategy for filling in missing values
+Missing values will be imputed by calculating the average steps for that interval across the days for which the value is not missing. 
 
 ```r
 mean_total_steps_by_interval2 <- mean_total_steps_by_interval[,2]
-number_of_days <- length(unique(activitydata$date))
-mean_total_steps_by_interval2 <- rep(mean_total_steps_by_interval2, times = number_of_days)
 activitydata_with_means <- cbind(activitydata, mean_total_steps_by_interval2)
 for(i in 1:length(activitydata_with_means$steps))
     if(is.na(activitydata_with_means$steps[[i]])) {
@@ -108,7 +107,8 @@ activitydata_with_means <- activitydata_with_means[,1:3]
 ### Generating a histogram of total steps per day after imputing missing values
 
 ```r
-hist(activitydata_with_means$steps, xlab = "Total Steps", main = "Histogram of Total Steps per Day", sub = "Dataset with Imputed Values")
+totalsteps1 <- with(activitydata_with_means, tapply(steps, date, sum, na.rm = TRUE))
+hist(totalsteps1, xlab = "Total Steps", main = "Histogram of Total Steps per Day", sub = "Dataset with Imputed Values")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
@@ -116,21 +116,21 @@ hist(activitydata_with_means$steps, xlab = "Total Steps", main = "Histogram of T
 ### Calculating mean and median of total steps per day after imputing missing values
 
 ```r
-meantotalsteps1 <- mean(activitydata_with_means$steps)
+meantotalsteps1 <- mean(totalsteps1)
 paste("Mean", meantotalsteps1, sep = ": ")
 ```
 
 ```
-## [1] "Mean: 37.3825995807128"
+## [1] "Mean: 10766.1886792453"
 ```
 
 ```r
-mediantotalsteps1 <- median(activitydata_with_means$steps)
+mediantotalsteps1 <- median(totalsteps1)
 paste("Meadian", mediantotalsteps1, sep = ": ")
 ```
 
 ```
-## [1] "Meadian: 0"
+## [1] "Meadian: 10766.1886792453"
 ```
 
 ### Calculating the difference in mean and median of dataset with and without imputed values
@@ -141,7 +141,7 @@ paste("Difference in Mean", diff_in_mean, sep = ": ")
 ```
 
 ```
-## [1] "Difference in Mean: 9316.84690861601"
+## [1] "Difference in Mean: 1411.95917104856"
 ```
 
 ```r
@@ -150,7 +150,7 @@ paste("Difference in Meadian", diff_in_median, sep = ": ")
 ```
 
 ```
-## [1] "Difference in Meadian: 10395"
+## [1] "Difference in Meadian: 371.188679245282"
 ```
 
 ## Part 5
@@ -182,14 +182,14 @@ mean_total_steps_by_interval_weekday <- with(activitydata_with_means_weekday, ta
 mean_total_steps_by_interval_weekday <- as.data.frame(as.table(mean_total_steps_by_interval_weekday))
 colnames(mean_total_steps_by_interval_weekday) <- c("Interval", "Average_Total_Steps")
 mean_total_steps_by_interval_weekday <- cbind(activitydata_with_means_weekday, mean_total_steps_by_interval_weekday)
-with(mean_total_steps_by_interval_weekday, plot(Interval, Average_Total_Steps, type = "l", xlab = "Interval", ylab = "Average Total Steps", main = "Weekday", ylim = c(0,250)))
+with(mean_total_steps_by_interval_weekday, plot(as.numeric(as.character(Interval)), Average_Total_Steps, type = "l", xlab = "Interval", ylab = "Average Total Steps", main = "Weekday", ylim = c(0,250)))
 
 activitydata_with_means_weekend <- activitydata_with_means_split$Weekend
 mean_total_steps_by_interval_weekend <- with(activitydata_with_means_weekend, tapply(steps, interval, mean))
 mean_total_steps_by_interval_weekend <- as.data.frame(as.table(mean_total_steps_by_interval_weekend))
 colnames(mean_total_steps_by_interval_weekend) <- c("Interval", "Average_Total_Steps")
 mean_total_steps_by_interval_weekend <- cbind(activitydata_with_means_weekend, mean_total_steps_by_interval_weekend)
-with(mean_total_steps_by_interval_weekend, plot(Interval, Average_Total_Steps, type = "l", xlab = "Interval", ylab = "Average Total Steps", main = "Weekend", ylim = c(0,250)))
+with(mean_total_steps_by_interval_weekend, plot(as.numeric(as.character(Interval)), Average_Total_Steps, type = "l", xlab = "Interval", ylab = "Average Total Steps", main = "Weekend", ylim = c(0,250)))
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
